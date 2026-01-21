@@ -3,6 +3,7 @@
 import pandas as pd
 from sqlalchemy import create_engine
 from tqdm.auto import tqdm
+import click
 
 def ingest_data(url: str, engine, target_table: str, chunksize: int
 ) -> pd.DataFrame:
@@ -49,22 +50,24 @@ def ingest_data(url: str, engine, target_table: str, chunksize: int
 
     # print(pd.io.sql.get_schema(df, name='yellow_taxi_data', con=engine))
 
-def main():
-    pg_user = 'root'
-    pg_pass = 'root'
-    pg_host = 'localhost'
-    pg_port = '5432'
-    pg_db = 'ny_taxi'
-    year = 2021
-    month = 1
-    chunksize = 100000
-    target_table = 'yellow_taxi_data'
+@click.command()
+@click.option('--pg_user', default='root', help='PostgreSQL user')
+@click.option('--pg_pass', default='root', help='PostgreSQL password')
+@click.option('--pg_host', default='localhost', help='PostgreSQL host')
+@click.option('--pg_port', default='5432', help='PostgreSQL port')
+@click.option('--pg_db', default='ny_taxi', help='PostgreSQL database name')
+@click.option('--year', default=2021, help='Year for data ingestion')
+@click.option('--month', default=1, help='Month for data ingestion')
+@click.option('--chunksize', default=100000, help='Chunk size for data ingestion')
+@click.option('--target_table', default='yellow_taxi_data', help='Target table for data ingestion')
 
+def main(pg_user, pg_pass, pg_host, pg_port, pg_db, year, month, chunksize, target_table):
     engine = create_engine(f'postgresql://{pg_user}:{pg_pass}@{pg_host}:{pg_port}/{pg_db}')
 
     url_prefix = 'https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow'
     url = f'{url_prefix}/yellow_tripdata_{year:04d}-{month:02d}.csv.gz'
 
+    print(f'Ingesting data to {target_table} for {year}-{month}...')
     ingest_data(
         url=url,
         engine=engine,
