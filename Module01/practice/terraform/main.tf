@@ -10,13 +10,13 @@ terraform {
 provider "google" {
   # Configuration options
   credentials = "./keys.json"
-  project = "long-sonar-485113-u0"
-  region  = "us-central1"
+  project     = var.gcp_project
+  region      = var.gcp_region
 }
 
 resource "google_storage_bucket" "my-bucket" {
-  name          = "my-first-bucket-485113-u0"
-  location      = "US"
+  name          = var.bucket_name
+  location      = var.gcp_location
   force_destroy = true
 
   lifecycle_rule {
@@ -27,4 +27,10 @@ resource "google_storage_bucket" "my-bucket" {
       type = "AbortIncompleteMultipartUpload"
     }
   }
+}
+
+resource "google_bigquery_dataset" "my-dataset" {
+  dataset_id = var.my_dataset_id
+  location   = var.gcp_location
+  delete_contents_on_destroy = true
 }
