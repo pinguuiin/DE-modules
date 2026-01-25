@@ -1,0 +1,58 @@
+services:
+  # PostgreSQL Database Service
+  pgdb:
+    image: postgres:18
+    container_name: pgdb
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=ny_taxi
+    volumes:
+      - ./pgdb:/var/lib/postgresql:rw
+    ports:
+      - "5432:5432"
+    networks:
+      - pg_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d ny_taxi"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # pgAdmin web interface
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "8085:80"
+    networks:
+      - pg_net
+    depends_on:
+      - pgdb
+
+  # Data ingestion container
+  ingest:
+    build: ./ingest
+    container_name: ingest
+    depends_on:
+      pgdb:
+        condition: service_healthy
+    networks:
+      - pg_net
+    command: ["python", "ingest_data.py"]
+    volumes:
+      - ./data:/data:ro
+
+
+networks:
+  pg_net:
+    driver: bridge
+
+volumes:
+  pgadmin_data:
