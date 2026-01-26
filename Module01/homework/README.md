@@ -114,6 +114,9 @@ LIMIT 1;
 # Terraform
 
 ## Q7 Terraform Workflow
-- `terraform init`: Downloading the provider plugins and setting up backend
-- `terraform apply -auto-approve`: Generating proposed changes and auto-executing the plan
-- `terraform destroy`: Remove all resources managed by terraform
+- `terraform init`<br>
+Downloading the provider plugins and setting up backend
+- `terraform apply -auto-approve`<br>
+Generating proposed changes and auto-executing the plan
+- `terraform destroy`<br>
+Remove all resources managed by terraform
