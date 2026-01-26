@@ -110,3 +110,10 @@ ORDER BY
 LIMIT 1;
 ```
 \> Yorkville West
+
+# Terraform
+
+## Q7 Terraform Workflow
+- `terraform init`: Downloading the provider plugins and setting up backend
+- `terraform apply -auto-approve`: Generating proposed changes and auto-executing the plan
+- `terraform destroy`: Remove all resources managed by terraform
