@@ -15,6 +15,22 @@ wheels/
 database/
 keys.json
 
+#-----------Airflow.gitignore-----------
+
+# Ignore the GCP key
+config/gcp-key.json
+gcp-key.json
+
+# Ignore Airflow logs and database
+logs/
+airflow.db
+
+# Ignore environment variables
+.env
+
+# Ignore OS files
+.DS_Store
+
 
 #----------Terraform.gitignore----------
 
