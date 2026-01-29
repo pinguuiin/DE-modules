@@ -21,9 +21,10 @@ keys.json
 config/gcp-key.json
 gcp-key.json
 
-# Ignore Airflow logs and database
-logs/
+# Ignore Airflow configuration, database and logs
+airflow.cfg
 airflow.db
+logs/
 
 # Ignore environment variables
 .env
